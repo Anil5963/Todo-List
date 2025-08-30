@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- In your <head> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body class="flex justify-center items-center min-h-screen bg-gray-400">
+    <div class="flex flex-col items-center w-[320px] bg-blue-200 rounded-xl">
+
+        <div class="flex justify-center">
+            <h1 class="font-bold text-2xl mb-4 text-blue-600">Todo List</h1>
+        </div>
+
+        <div class="flex justify-between items-center mb-4 px-3 w-full">
+            <input type="text" placeholder="Please Enter List"
+                class="input pl-2 h-[35px] rounded-xl w-[200px] border-none">
+            <button class="submit px-3 py-2 rounded-xl bg-green-500 hover:bg-green-600 font-bold ">Submit</button>
+        </div>
+
+        <div id="itemlist">
+        </div>
+
+    </div>
+
+
+    <script>
+        const input = document.querySelector(".input")
+        const submit = document.querySelector(".submit")
+        const itemlist = document.querySelector("#itemlist")
+
+        submit.addEventListener("click", () => {
+            const inputvalue = input.value.trim()
+            if (inputvalue === "") {
+                alert("Plaese list your task")
+                return;
+            }
+
+            const item = document.createElement("div")
+            item.classList.add("flex", "justify-between", "items-center", "px-3", "w-[320px]",)
+
+            const check = document.createElement("div")
+            const checkicon = document.createElement("i")
+            checkicon.classList.add("fa-solid", "fa-check", "text-green-600", "text-xl", "font-bold")
+            check.appendChild(checkicon)
+
+            const para = document.createElement("div");
+            para.classList.add("flex", "items-center", "justify-between", "group", "relative");
+
+            const paras = document.createElement("p");
+            paras.classList.add("flex-1", "text-xl", "font-bold");
+            paras.textContent = inputvalue;
+
+            // Create the edit <span>
+            const edit = document.createElement("span");
+            edit.classList.add(
+                "absolute", "right-0", "bg-gray-100", "text-sm", "px-2", "py-1",
+                "rounded", "opacity-0", "group-hover:opacity-100", "transition", "duration-200", "cursor-pointer"
+            );
+            edit.textContent = "Edit";
+
+            const done = document.createElement("span");
+            done.classList.add(
+                "absolute", "right-0", "bg-gray-100", "text-sm", "px-2", "py-1",
+                "rounded", "opacity-0", "group-hover:opacity-100", "transition", "duration-200", "cursor-pointer"
+            );
+            edit.textContent = "Done";
+
+            para.appendChild(paras);
+            para.appendChild(edit);
+
+
+            para.addEventListener("click", () => {
+                const inputfield = document.createElement("textarea")
+                inputfield.type = "text"
+                inputfield.value = paras.textContent
+
+                para.replaceChild(inputfield, paras)
+                inputfield.focus();
+
+                inputfield.addEventListener(() => {
+                    paras.textContent = inputfield.value
+                    para.replaceChild(paras, inputfield)
+
+                    textarea.value = ""
+                })
+
+                inputfield.addEventListener("keypress", (e) => {
+                    if (e.key === "Shift") {
+                        paras.textcontent = inputfield.value
+                        para.replaceChild(paras, inputfield)
+                    }
+                })
+            })
+
+            const deletebtn = document.createElement("div")
+            const deletebtnicon = document.createElement("i")
+            deletebtnicon.classList.add("fa-solid", "fa-trash", "text-red-500", "hover:text-red-600", "text-xl")
+            deletebtn.appendChild(deletebtnicon)
+
+
+            item.appendChild(check)
+            item.appendChild(para)
+            item.appendChild(deletebtn)
+            itemlist.appendChild(item)
+
+            input.value = ""
+
+            deletebtn.addEventListener("click", () => {
+                item.remove()
+            })
+
+        })
+
+        addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                submit.click()
+                return
+            }
+        })
+    </script>
+</body>
+
+</html>
